@@ -1,4 +1,4 @@
-# Rassi Engineering Remote Control 💬
+# Rassi Engineering Remote Control ⚙️
 
 ## Deployed app for triggering question and answers to game players and get back their answers
 
