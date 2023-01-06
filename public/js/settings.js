@@ -9,7 +9,7 @@ function init(){
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
         // User is signed in. Get their name and email.
-        name = user.displayName;
+        let name = user.displayName;
         userName.innerHTML = "Wleocme, " + name + "!";
         setName.placeholder = name;
         }else{
