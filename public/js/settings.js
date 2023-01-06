@@ -1,4 +1,4 @@
-var firebase = app_fireBase;
+// var firebase = app_fireBase;
 const userName = document.getElementById("user-name");
 const setName = document.getElementById("user_profile_name");
 const encryption = document.getElementById("encryption-mode");

@@ -1,4 +1,4 @@
-var firebase = app_fireBase;
+// var firebase = app_fireBase;
 let email = "";
 let name = "";
 const msgScreen = document.getElementById("messages");
