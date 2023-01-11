@@ -1,0 +1,26 @@
+{% extends('base.html') %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row text-center m-5">
+        <h2 dir="rtl">إن رقمك هو
+            <span class="m-2"><code class="p-2 bg-light rounded fs-4" id="code">*****</code></span>
+        </h2>
+    </div>
+    <div class="row">
+        <div class="col-12 text-center">
+            <h2 class="m-3">اضغط على الزر حين يصبح لونه أخضر</h2>
+            <span id="btn-buzzer" onclick="buzz_in()" class="disabled btn btn-light btn-circle btn-xl m-5 p-5 border border-secondary shadow-lg switch-button animate__animated animate__zoomIn">
+                <i class="fa fa-power-off"></i>
+            </span>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block page_js %}
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/player.js') }}"></script>
+
+{% endblock %}

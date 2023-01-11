@@ -1,0 +1,10 @@
+.git
+Dockerfile
+.DS_Store
+.gitignore
+.dockerignore
+*.pyc
+*.pyo
+*.pyd
+__pycache__
+.pytest_cache
