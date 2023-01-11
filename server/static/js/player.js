@@ -17,7 +17,8 @@ function buzz_in(){
     let timestamp = Date.now()
     let code = parseInt($("#code").html());
     if(!code) return;
-    socket.emit("BUZZ_IN", {'timestamp': timestamp, 'code': code});    
+    socket.emit("BUZZ_IN", {'timestamp': timestamp, 'code': code});
+    $("#btn-buzzer").addClass("disabled");
 }
 
 socket.on('ENABLE_BUZZER', function(msg){
@@ -31,5 +32,5 @@ socket.on('DISABLE_BUZZER', function(msg){
 })
 
 $(document).ready(function () {
-    set_code();
+    // set_code();
 });

@@ -2,16 +2,21 @@
 
 {% block content %}
 
-<div class="container">
+<div class="container"
+    style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;"
+    unselectable="on" onselectstart="return false;" onmousedown="return false;">
     <div class="row text-center m-5">
-        <h2 dir="rtl">إن رقمك هو
-            <span class="m-2"><code class="p-2 bg-light rounded fs-4" id="code">*****</code></span>
+        <h2 dir="rtl">
+            عزيزي المتسابق: <strong class="text-primary">{{ player['name'] }}</strong><br><br>
+            إن رقمك هو
+            <span class="m-2"><code class="p-2 bg-light rounded fs-4" id="code">{{ player['code'] }}</code></span>
         </h2>
     </div>
     <div class="row">
         <div class="col-12 text-center">
             <h2 class="m-3">اضغط على الزر حين يصبح لونه أخضر</h2>
-            <span id="btn-buzzer" onclick="buzz_in()" class="disabled btn btn-light btn-circle btn-xl m-5 p-5 border border-secondary shadow-lg switch-button animate__animated animate__zoomIn">
+            <span id="btn-buzzer" onclick="buzz_in()"
+                class="disabled btn btn-light btn-circle btn-xl m-5 p-5 border border-secondary shadow-lg switch-button animate__animated animate__zoomIn">
                 <i class="fa fa-power-off"></i>
             </span>
         </div>

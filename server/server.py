@@ -5,16 +5,19 @@ from threading import Lock
 from datetime import datetime
 import os
 import sqlite3
+from flask import abort
 
-"""
-Background Thread
-"""
+DATABASE = 'game.sqlite'
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+db_path = os.path.join(BASE_DIR, DATABASE)
+
 thread = None
 thread_lock = Lock()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'donsky!'
-socketio = SocketIO(app, cors_allowed_origins='*')
+socketio = SocketIO(app, cors_allowed_origins='*', ping_timeout=10, ping_interval=5)
 
 def get_current_datetime():
     now = datetime.now()
@@ -27,13 +30,6 @@ def background_thread():
         socketio.emit('updateSensorData', {'value': dummy_sensor_value, "date": get_current_datetime()})
         socketio.sleep(1)
 
-import sqlite3
-
-DATABASE = 'game.sqlite'
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-db_path = os.path.join(BASE_DIR, DATABASE)
-
 
 def get_db_connection():
     conn = sqlite3.connect(db_path)
@@ -45,6 +41,12 @@ def get_rows(query):
     cur = conn.cursor()
     cur = cur.execute(query)
     return [dict(row) for row in cur.fetchall()]
+
+def get_single_row(query):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur = cur.execute(query)
+    return dict(cur.fetchone())
 
 def insert_to_db(query):
     print("--+"*10)
@@ -68,9 +70,13 @@ def index():
 def admin():
     return render_template('admin.html')
 
-@app.route('/player')
-def player():
-    return render_template('player.html')
+@app.route('/player/<id>')
+def player(id=1):
+    if id not in ['1', '2', '3', '4']:
+        return abort(404)
+    query = f"SELECT * FROM players WHERE ix={id}"
+    player_info = get_single_row(query)
+    return render_template('player.html', player=player_info)
 
 @app.route('/submit_code', methods=['POST'])
 def submit_code():
@@ -86,6 +92,7 @@ def submit_code():
 
 @socketio.on('ENABLE_BUZZER')
 def enable_buzzer():
+    insert_to_db("UPDATE 'players' SET timestamp = NULL")
     socketio.emit("ENABLE_BUZZER")
     print("--------- Buzzer is ON ✅ ---------")
 
@@ -103,9 +110,8 @@ def buzz(msg):
 @socketio.on('BUZZER_RESULTS')
 def buzzer_results():
     players = get_rows("SELECT * FROM players")
-    print(players)
+    players = list(filter(lambda p: p['timestamp'] is not None, players))
     ordered_players = sorted(players, key=lambda row: row['timestamp'])
-    print(ordered_players)
     socketio.emit("PLAYERS_ORDER", ordered_players)
     
 @socketio.on('connect')
